@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Analytics - Jabson Foods</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+background:#f4f6f8;
+}
+
+.nav{
+background:#131921;
+padding:15px 25px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.nav a{
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+.container{
+padding:30px;
+}
+
+h1{
+margin-bottom:25px;
+color:#222;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+.card h3{
+font-size:17px;
+color:#555;
+margin-bottom:12px;
+}
+
+.card p{
+font-size:30px;
+font-weight:bold;
+color:#ff9900;
+}
+
+.section{
+margin-top:30px;
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+.bar{
+height:25px;
+background:#ddd;
+border-radius:30px;
+overflow:hidden;
+margin:12px 0;
+}
+
+.fill{
+height:100%;
+background:#00c853;
+width:0%;
+transition:.5s;
+}
+
+.small{
+color:#666;
+font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+<a href="admin.html">Dashboard</a>
+<a href="products-admin.html">Products</a>
+<a href="orders-admin.html">Orders</a>
+<a href="analytics.html">Analytics</a>
+<a href="admin-login.html">Logout</a>
+</div>
+
+<div class="container">
+
+<h1>📊 Admin Analytics Dashboard</h1>
+
+<div class="cards">
+
+<div class="card">
+<h3>💰 Total Revenue</h3>
+<p id="totalRevenue">₹0</p>
+</div>
+
+<div class="card">
+<h3>📦 Total Orders</h3>
+<p id="totalOrders">0</p>
+</div>
+
+<div class="card">
+<h3>🛒 Total Products</h3>
+<p id="totalProducts">0</p>
+</div>
+
+<div class="card">
+<h3>✅ Delivered Orders</h3>
+<p id="deliveredOrders">0</p>
+</div>
+
+<div class="card">
+<h3>⏳ Pending Orders</h3>
+<p id="pendingOrders">0</p>
+</div>
+
+<div class="card">
+<h3>📦 Packed Orders</h3>
+<p id="packedOrders">0</p>
+</div>
+
+<div class="card">
+<h3>🚚 Shipped Orders</h3>
+<p id="shippedOrders">0</p>
+</div>
+
+<div class="card">
+<h3>❌ Cancelled Orders</h3>
+<p id="cancelledOrders">0</p>
+</div>
+
+<div class="card">
+<h3>💳 Online Orders</h3>
+<p id="onlineOrders">0</p>
+</div>
+
+<div class="card">
+<h3>💵 COD Orders</h3>
+<p id="codOrders">0</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>💳 Payment Method Ratio</h2>
+
+<p class="small">Online Orders</p>
+<div class="bar">
+<div class="fill" id="onlineFill"></div>
+</div>
+
+<p class="small">COD Orders</p>
+<div class="bar">
+<div class="fill" id="codFill"></div>
+</div>
+</div>
+
+</div>
+
+<script>
+async function loadAnalytics(){
+
+try{
+
+const response = await fetch("http://localhost:5000/admin/analytics");
+const data = await response.json();
+
+document.getElementById("totalRevenue").innerText =
+"₹" + Number(data.totalRevenue || 0).toFixed(2);
+
+document.getElementById("totalOrders").innerText =
+data.totalOrders;
+
+document.getElementById("totalProducts").innerText =
+data.totalProducts;
+
+document.getElementById("deliveredOrders").innerText =
+data.deliveredOrders;
+
+document.getElementById("pendingOrders").innerText =
+data.pendingOrders;
+
+document.getElementById("packedOrders").innerText =
+data.packedOrders;
+
+document.getElementById("shippedOrders").innerText =
+data.shippedOrders;
+
+document.getElementById("cancelledOrders").innerText =
+data.cancelledOrders;
+
+document.getElementById("onlineOrders").innerText =
+data.onlineOrders;
+
+document.getElementById("codOrders").innerText =
+data.codOrders;
+
+const paymentTotal =
+(data.onlineOrders || 0) + (data.codOrders || 0);
+
+const onlinePercent =
+paymentTotal ? (data.onlineOrders / paymentTotal) * 100 : 0;
+
+const codPercent =
+paymentTotal ? (data.codOrders / paymentTotal) * 100 : 0;
+
+document.getElementById("onlineFill").style.width =
+onlinePercent + "%";
+
+document.getElementById("codFill").style.width =
+codPercent + "%";
+
+}catch(error){
+
+console.log(error);
+alert("Analytics Load Failed");
+
+}
+
+}
+
+loadAnalytics();
+setInterval(loadAnalytics,5000);
+</script>
+
+</body>
+</html>

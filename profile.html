@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Profile</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f5f5f5;
+padding:30px;
+}
+
+.profile-box{
+max-width:500px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(0,0,0,0.1);
+text-align:center;
+margin-top:50px;
+}
+
+.profile-box h1{
+margin-bottom:20px;
+}
+
+.profile-box p{
+font-size:18px;
+margin:15px 0;
+}
+
+.btn{
+display:inline-block;
+padding:12px 20px;
+background:#ff6600;
+color:white;
+text-decoration:none;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+font-size:16px;
+}
+
+.btn:hover{
+opacity:0.9;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="profile-box">
+
+<a href="profile.html" id="profileLink">
+  <img
+    id="navProfilePic"
+    src="https://via.placeholder.com/35"
+    style="
+      width:35px;
+      height:35px;
+      border-radius:50%;
+      object-fit:cover;
+      vertical-align:middle;
+    "
+  >
+</a>
+
+<div style="margin-bottom:20px;">
+
+  <img
+    id="profilePic"
+    src="https://via.placeholder.com/120"
+    alt="Profile"
+    style="
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid orange;
+    "
+  >
+
+  <br><br>
+
+  <input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    onchange="uploadPhoto()"
+  >
+
+</div>
+
+<p>
+<b>Name:</b>
+<span id="userName"></span>
+</p>
+
+<p>
+<b>Email:</b>
+<span id="userEmail"></span>
+</p>
+
+<a href="orders.html" class="btn">
+📦 My Orders
+</a>
+
+<br><br>
+
+<button class="btn" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<script>
+
+// Name show karo
+document.getElementById("userName").innerText =
+localStorage.getItem("userName") || "Not Available";
+
+// Email show karo
+document.getElementById("userEmail").innerText =
+localStorage.getItem("userEmail") || "Not Available";
+
+// Logout function
+function logout(){
+
+localStorage.removeItem("userLoggedIn");
+localStorage.removeItem("userName");
+localStorage.removeItem("userEmail");
+
+alert("Logged Out Successfully");
+
+window.location.href = "login.html";
+
+}
+
+function uploadPhoto(){
+
+const file =
+document.getElementById("photoInput")
+.files[0];
+
+if(!file) return;
+
+const reader =
+new FileReader();
+
+reader.onload = function(e){
+
+localStorage.setItem(
+"profilePhoto",
+e.target.result
+);
+
+document.getElementById(
+"profilePic"
+).src = e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+window.onload = function(){
+
+const photo =
+localStorage.getItem(
+"profilePhoto"
+);
+
+if(photo){
+
+document.getElementById(
+"profilePic"
+).src = photo;
+
+}
+
+};
+</script>
+
+</body>
+</html>

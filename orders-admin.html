@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Orders Admin</title>
+
+<style>
+
+body{
+font-family:Poppins;
+padding:20px;
+background:#f5f5f5;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+.nav{
+background:#222;
+padding:15px;
+margin-bottom:20px;
+}
+
+.nav a{
+color:white;
+text-decoration:none;
+margin-right:20px;
+}
+
+button{
+padding:10px 15px;
+cursor:pointer;
+margin-right:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="nav">
+
+<a href="admin.html">Dashboard</a> <a href="products-admin.html">Products</a> <a href="orders-admin.html">Orders</a> <a href="analytics.html">Analytics</a>
+
+</div>
+
+<h1>Orders Management</h1>
+
+<div id="orders"></div>
+
+<script>
+
+async function loadOrders(){
+
+try{
+
+const response =
+await fetch(
+"http://localhost:5000/admin/orders"
+);
+
+const orders =
+await response.json();
+
+let html = "";
+
+orders.forEach(order=>{
+
+html += `
+
+<div class="card">
+
+<h3>${order.customerName}</h3>
+
+<p>Total: ₹${order.totalAmount}</p>
+
+<p>Status: ${order.status}</p>
+
+<button onclick="updateStatus('${order._id}','Shipped')">
+Shipped
+</button>
+
+<button onclick="updateStatus('${order._id}','Delivered')">
+Delivered
+</button>
+
+<button onclick="updateStatus('${order._id}','Packed')">
+Packed
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("orders").innerHTML =
+html;
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+async function updateStatus(id,status){
+
+try{
+
+await fetch(
+`http://localhost:5000/admin/update-status/${id}`,
+{
+method:"PUT",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+status
+})
+}
+);
+
+loadOrders();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+function downloadInvoice(id){
+
+window.open(
+"http://localhost:5000/invoice/" + id,
+"_blank"
+);
+
+}
+
+loadOrders();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracking - Jabson Foods</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f5f5f5;
+}
+
+/* HEADER */
+
+header{
+background:linear-gradient(135deg,#b22222,#ff4d4d);
+color:white;
+padding:30px;
+text-align:center;
+}
+
+header h1{
+font-size:40px;
+}
+
+.back-btn{
+display:inline-block;
+margin-top:15px;
+padding:12px 22px;
+background:white;
+color:#b22222;
+text-decoration:none;
+border-radius:12px;
+font-weight:bold;
+transition:0.3s;
+}
+
+.back-btn:hover{
+transform:scale(1.05);
+}
+
+/* MAIN CONTAINER */
+
+.container{
+max-width:1000px;
+margin:50px auto;
+background:white;
+padding:40px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* TRACK LINE */
+
+.track-line{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+margin-bottom:40px;
+}
+
+.circle{
+width:75px;
+height:75px;
+border-radius:50%;
+background:linear-gradient(135deg,#00c853,#009624);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:30px;
+font-weight:bold;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.line{
+flex:1;
+height:8px;
+background:#00c853;
+border-radius:20px;
+}
+
+/* PROGRESS BAR */
+
+.progress-box{
+margin:40px 0;
+text-align:center;
+}
+
+.progress-bar{
+width:100%;
+height:28px;
+background:#ddd;
+border-radius:30px;
+overflow:hidden;
+box-shadow:inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.progress-fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#00c853,#64dd17);
+border-radius:30px;
+transition:1s;
+}
+
+#progressText{
+margin-top:15px;
+font-size:32px;
+font-weight:bold;
+color:#00c853;
+}
+
+/* STEP CARDS */
+
+.steps{
+display:flex;
+justify-content:space-between;
+gap:20px;
+flex-wrap:wrap;
+margin-top:30px;
+}
+
+.step{
+flex:1;
+min-width:180px;
+background:#fafafa;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+transition:0.3s;
+text-align:center;
+}
+
+.step:hover{
+transform:translateY(-8px);
+}
+
+.step h3{
+margin-top:15px;
+color:#b22222;
+font-size:22px;
+}
+
+.step p{
+margin-top:10px;
+color:#555;
+line-height:1.5;
+font-size:15px;
+}
+
+/* FOOTER */
+
+footer{
+background:#111;
+color:white;
+text-align:center;
+padding:30px;
+margin-top:50px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.track-line{
+flex-direction:column;
+}
+
+.line{
+width:8px;
+height:70px;
+}
+
+.steps{
+flex-direction:column;
+}
+
+.container{
+margin:20px;
+padding:25px;
+}
+
+header h1{
+font-size:30px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>🚚 Delivery Tracking</h1>
+
+<a href="index.html" class="back-btn">
+⬅ Back To Home
+</a>
+
+</header>
+
+<div class="container">
+
+<!-- TRACKING LINE -->
+
+<div class="track-line">
+
+<div class="circle">✓</div>
+
+<div class="line"></div>
+
+<div class="circle">✓</div>
+
+<div class="line"></div>
+
+<div class="circle">✓</div>
+
+<div class="line"></div>
+
+<div class="circle">✓</div>
+
+</div>
+
+<!-- LIVE PROGRESS -->
+
+<div class="progress-box">
+
+<div class="progress-bar">
+
+<div class="progress-fill" id="progressFill"></div>
+
+</div>
+
+<h2 id="progressText">0%</h2>
+
+</div>
+
+<!-- STEP CARDS -->
+
+<div class="steps">
+
+<div class="step">
+<h3>📦 Order Placed</h3>
+<p>Your order has been placed successfully.</p>
+</div>
+
+<div class="step">
+<h3>📦 Packed</h3>
+<p>Your items are packed safely.</p>
+</div>
+
+<div class="step">
+<h3>🚚 Shipped</h3>
+<p>Your package is on the way.</p>
+</div>
+
+<div class="step">
+<h3>🏠 Delivered</h3>
+<p>Your order delivered successfully.</p>
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+<h2>Jabson Foods</h2>
+
+<p>© 2026 Jabson Foods</p>
+
+</footer>
+
+<!-- LIVE PROGRESS SCRIPT -->
+<script>
+
+async function loadTracking(){
+
+  try{
+
+    const response = await fetch("http://localhost:5000/orders");
+    const orders = await response.json();
+
+    const fill = document.getElementById("progressFill");
+    const text = document.getElementById("progressText");
+
+    if(orders.length === 0){
+      fill.style.width = "0%";
+      text.innerText = "No Order Found";
+      return;
+    }
+
+    const latestOrder = orders[0];
+    const status = latestOrder.status || "Pending";
+
+    if(status === "Pending"){
+      fill.style.width = "25%";
+      text.innerText = "📦 Order Placed";
+    }
+    else if(status === "Packed"){
+      fill.style.width = "50%";
+      text.innerText = "📦 Packed";
+    }
+    else if(status === "Shipped"){
+      fill.style.width = "75%";
+      text.innerText = "🚚 Shipped";
+    }
+    else if(status === "Delivered"){
+      fill.style.width = "100%";
+      text.innerText = "✅ Delivered";
+    }
+    else if(status === "Cancelled"){
+      fill.style.width = "100%";
+      fill.style.background = "red";
+      text.style.color = "red";
+      text.innerText = "❌ Order Cancelled";
+    }
+
+  }catch(error){
+    console.log(error);
+  }
+
+}
+
+loadTracking();
+
+/* LIVE AUTO UPDATE EVERY 5 SECONDS */
+setInterval(loadTracking, 5000);
+
+</script>
+</body>
+</html>

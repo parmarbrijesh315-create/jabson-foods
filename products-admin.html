@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Products Admin</title>
+
+<style>
+
+body{
+font-family:Poppins;
+padding:20px;
+background:#f5f5f5;
+}
+
+.card{
+background:white;
+padding:15px;
+margin:10px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+input{
+padding:10px;
+margin:5px;
+}
+
+button{
+padding:10px 15px;
+cursor:pointer;
+}
+
+.nav{
+background:#222;
+padding:15px;
+margin-bottom:20px;
+}
+
+.nav a{
+color:white;
+text-decoration:none;
+margin-right:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="nav">
+
+<a href="admin.html">Dashboard</a> <a href="products-admin.html">Products</a> <a href="orders-admin.html">Orders</a> <a href="analytics.html">Analytics</a>
+
+</div>
+
+<h1>Products Management</h1>
+
+<input type="text" id="productName" placeholder="Product Name">
+
+<input type="number" id="productPrice" placeholder="Price">
+
+<input type="text" id="productImage" placeholder="Image URL">
+
+<button onclick="addProduct()">
+Add Product
+</button>
+
+<div id="productsList"></div>
+
+<script>
+
+async function addProduct(){
+
+const name =
+document.getElementById("productName").value;
+
+const price =
+document.getElementById("productPrice").value;
+
+const image =
+document.getElementById("productImage").value;
+
+try{
+
+const response =
+await fetch(
+"http://localhost:5000/admin/add-product",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name,
+price,
+image
+})
+}
+);
+
+const data =
+await response.json();
+
+if(data.success){
+
+alert("Product Added Successfully");
+
+loadProducts();
+
+}
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+async function loadProducts(){
+
+try{
+
+const response =
+await fetch(
+"http://localhost:5000/products"
+);
+
+const products =
+await response.json();
+
+let html = "";
+
+products.forEach(product=>{
+
+html += `
+
+<div class="card">
+
+<img
+src="${product.image}"
+width="100"
+
+>
+
+<h3>${product.name}</h3>
+
+<p>₹${product.price}</p>
+
+<button onclick="deleteProduct('${product._id}')">
+Delete
+</button>
+
+<button onclick="editProduct(
+'${product._id}',
+'${product.name}',
+'${product.price}',
+'${product.image}'
+)">
+Edit </button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"productsList"
+).innerHTML = html;
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+async function deleteProduct(id){
+
+try{
+
+await fetch(
+`http://localhost:5000/admin/delete-product/${id}`,
+{
+method:"DELETE"
+}
+);
+
+alert("Product Deleted");
+
+loadProducts();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+async function editProduct(id,name,price,image){
+
+const newName =
+prompt("Product Name",name);
+
+if(newName===null) return;
+
+const newPrice =
+prompt("Price",price);
+
+if(newPrice===null) return;
+
+const newImage =
+prompt("Image URL",image);
+
+if(newImage===null) return;
+
+try{
+
+const response =
+await fetch(
+`http://localhost:5000/admin/edit-product/${id}`,
+{
+method:"PUT",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:newName,
+price:newPrice,
+image:newImage
+})
+}
+);
+
+const data =
+await response.json();
+
+if(data.success){
+
+alert("Product Updated");
+
+loadProducts();
+
+}
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+loadProducts();
+
+</script>
+
+</body>
+
+</html>
