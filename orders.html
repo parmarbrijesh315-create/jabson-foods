@@ -240,7 +240,7 @@ try{
 
 const response =
 await fetch(
-"http://localhost:5000/orders"
+"https://jabson-foods.onrender.com/orders"
 );
 
 const orders =
@@ -400,7 +400,7 @@ function buyAgain(items){
   function downloadInvoice(id){
 
   window.open(
-    "http://localhost:5000/invoice/" + id,
+    "https://jabson-foods.onrender.com/invoice/" + id,
     "_blank"
   );
 
@@ -426,7 +426,7 @@ if(!ok) return;
 try{
 
 const response = await fetch(
-`http://localhost:5000/cancel-order/${id}`,
+`https://jabson-foods.onrender.com/cancel-order/${id}`,
 {
 method:"PUT"
 }

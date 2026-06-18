@@ -86,7 +86,7 @@ try{
 
 const response =
 await fetch(
-"http://localhost:5000/admin/add-product",
+"https://jabson-foods.onrender.com/admin/add-product",
 {
 method:"POST",
 headers:{
@@ -125,7 +125,7 @@ try{
 
 const response =
 await fetch(
-"http://localhost:5000/products"
+"https://jabson-foods.onrender.com/products"
 );
 
 const products =
@@ -184,7 +184,7 @@ async function deleteProduct(id){
 try{
 
 await fetch(
-`http://localhost:5000/admin/delete-product/${id}`,
+`https://jabson-foods.onrender.com/admin/delete-product/${id}`,
 {
 method:"DELETE"
 }
@@ -223,7 +223,7 @@ try{
 
 const response =
 await fetch(
-`http://localhost:5000/admin/edit-product/${id}`,
+`https://jabson-foods.onrender.com/admin/edit-product/${id}`,
 {
 method:"PUT",
 headers:{

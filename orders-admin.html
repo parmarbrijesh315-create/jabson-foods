@@ -64,7 +64,7 @@ try{
 
 const response =
 await fetch(
-"http://localhost:5000/admin/orders"
+"https://jabson-foods.onrender.com/admin/orders"
 );
 
 const orders =
@@ -118,7 +118,7 @@ async function updateStatus(id,status){
 try{
 
 await fetch(
-`http://localhost:5000/admin/update-status/${id}`,
+`https://jabson-foods.onrender.com/admin/update-status/${id}`,
 {
 method:"PUT",
 headers:{
@@ -143,7 +143,7 @@ console.log(error);
 function downloadInvoice(id){
 
 window.open(
-"http://localhost:5000/invoice/" + id,
+"https://jabson-foods.onrender.com/invoice/" + id,
 "_blank"
 );
 

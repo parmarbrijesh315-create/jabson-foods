@@ -2,7 +2,7 @@ let products = [];
 
 async function loadProducts() {
   try {
-const res = await fetch("http://localhost:5000/products");
+const res = await fetch("https://jabson-foods.onrender.com/products");
   products = await res.json();
 
 renderProducts(products);
@@ -627,7 +627,7 @@ return;
 }
 
 const response = await fetch(
-  "http://localhost:5000/place-order",
+  "https://jabson-foods.onrender.com/place-order",
   {
     method: "POST",
     headers: {
@@ -851,7 +851,7 @@ async function openGPay() {
 
   const amount = grandTotal;
 
-  const res = await fetch("http://localhost:5000/create-order", {
+  const res = await fetch("https://jabson-foods.onrender.com/create-order", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -883,7 +883,7 @@ async function openGPay() {
 
       try {
 
-        const saveOrder = await fetch("http://localhost:5000/place-order", {
+        const saveOrder = await fetch("https://jabson-foods.onrender.com/place-order", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
@@ -976,7 +976,7 @@ function addToWishlist(name, image, price) {
 async function updateStatus(id,status){
 
   await fetch(
-    `http://localhost:5000/admin/update-status/${id}`,
+    `https://jabson-foods.onrender.com/admin/update-status/${id}`,
     {
       method:"PUT",
       headers:{
@@ -1023,7 +1023,7 @@ comment
 try{
 
 const response = await fetch(
-"http://localhost:5000/add-review",
+"https://jabson-foods.onrender.com/add-review",
 {
 method:"POST",
 headers:{
@@ -1078,7 +1078,7 @@ async function loadReviews(productId){
 try{
 
 const response = await fetch(
-`http://localhost:5000/reviews/${productId}`
+`https://jabson-foods.onrender.com/reviews/${productId}`
 );
 
 const reviews = await response.json();
